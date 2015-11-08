@@ -1,24 +1,33 @@
+import pdb
 import cv2
 import numpy as np
 import pylab
 from functions import *
-import counter
+from counter import Counter
+from croppergui import Cropper
+
 
 
 interactive=True
 
 
 ######################################################
-#(path,videoname)=getfile()
+#(path,videoname)=askfile()
 videoname='VID_20150408_184717.mp4'
 path='C:\\Users\\Harsh\\Videos\\'
 ####################################################
 
 
-intensity=processVideo(path,videoname)
+#run process video and get returned intensity data
+intensitydata=processVideo(path,videoname)
 
-plotIntensity(intensity)
+
+#plot the data
+plotIntensity(intensitydata)
+
+
+
 
 #Counter
-peaks=counter.counter(intensity)
+peaks=Counter(intensitydata  )
 print peaks.numpeaks

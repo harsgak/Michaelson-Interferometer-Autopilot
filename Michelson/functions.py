@@ -1,3 +1,8 @@
+import cv2
+import pdb
+
+
+
 def getfile():
     """
     Asks the user for input file (location). Could be video,txt etc.
@@ -7,21 +12,34 @@ def getfile():
 
 
 
-def processVideo(path,videoname="",interactive=True,cropto=[(120,980),(228,1106)],startframe=0,endframe=1500):
+def processVideo(path,videoname="",interactive=True,startframe=0,endframe=1500):
     import cv2
+    import pdb
+    from croppergui import Cropper
     #opening video file
 
     cap=cv2.VideoCapture(path+videoname)
     
-    print cap.read()[1].shape
+    #pdb.run("print cap.read()[1].shape")
+    
+    
 
 
     ret,img= cap.read()
     frameno=0
+    
+    
+    #Getting the coord of area to focus on
+    roi=askFocusArea(img)
+    print roi
+    (x1,y1)=roi[0]
+    (x2,y2)=roi[1]
+    
 
     intensity=[]
-
-
+    
+    
+    # Video  Processing loop.
     while(cap.isOpened()):
     
         #read frameincrease frame count
@@ -34,7 +52,7 @@ def processVideo(path,videoname="",interactive=True,cropto=[(120,980),(228,1106)
     
         
         #focussing on centre
-        crop=frame[120:228,980:1106]
+        crop=frame[y1:y2,x1:x2]
         
         if interactive==True:
         #preview of frame and crop area
@@ -50,6 +68,8 @@ def processVideo(path,videoname="",interactive=True,cropto=[(120,980),(228,1106)
             cv2.destroyAllWindows()
             return intensity
             break
+        
+        
 def plotIntensity(intensity):
     import pylab
     #Plotting
@@ -68,3 +88,37 @@ def plotIntensity(intensity):
     pylab.show()
     #Add a peak plotter too . which plots the peak points detected in counter.
 
+def askFocusArea(image):
+    from croppergui import Cropper
+    
+    print "You are going to cropper window..."
+    instructions="   "
+    print instructions
+    
+    roigenerator=Cropper(image)
+    roigenerator.runcrop()
+    roi=roigenerator.getroi()
+    
+    if len(roi) == 2:
+        #pdb.run("""print "Got 2 points of roi rect" """)
+        if roi[0]!=roi[1]:
+            return roi
+    else :
+        #pdb.run("""print "Cropper.getroi() failed to return 2 pionts!!" """)
+        print "Sorry couldnt get area from mouseclicks\n Refer "
+        manual=raw_input ( "To enter manual focus mode reply 1 /nTo retry in cropper window reply 0.")
+        if manual=="1":
+            x1=input("Enter x1")
+            y1=input("Enter y1")
+            x2=input("Enter x2")
+            y2=input("Enter y2")
+            roi=[(x1,y1),(x2,y2)]
+            print "Required area  is the rectangle bounded by "+str(roi)
+            confirm=raw_input("To confirm  enter 1/nTo retry enter 0")
+            if confirm=="1":
+                return roi
+            else:
+                return askFocusArea(image)
+        else:
+            return askFocusArea(image)
+            

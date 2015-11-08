@@ -1,4 +1,4 @@
-class counter(object):
+class Counter(object):
     """intensityFile can be a LIST or a FILE(ADDRESS to file). please surround the address with ''. 
     format can be '.p' or '.txt' """
     
