@@ -8,7 +8,29 @@ def getfile():
     Asks the user for input file (location). Could be video,txt etc.
     returns tuple (path, filename)
     """
+    
+    z = False
+    while z == False :
+        filename=raw_input("Please enter file name (whole address if possible)\nNote: You can drag and drop the file in too.\n")
+        if filename.startswith('"') and filename.endswith('"'):
+            filename = filename[1:-1]
+        try:
+            txt=open(filename,'r+')
+            z = True
+            txt.close()
+        except IOError:
+            print "Sorry couldnt find/open file"
 
+    rev_file = filename[::-1]
+    for i in rev_file :
+        if i == '\\' :
+            break_index = rev_file.index(i)
+            break
+    videoname = rev_file[:break_index][::-1]
+    path = rev_file[break_index:][::-1]
+    return (path, videoname)
+
+    
 
 
 
