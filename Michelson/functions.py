@@ -77,7 +77,7 @@ def processVideo(path,videoname="",interactive=True,startframe=0,endframe=1500):
             frameno+=1
         #printing frame no
         frno="frame no "+str(frameno)
-        print '\r'+frno,
+        
     
         
         #focussing on centre
