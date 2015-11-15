@@ -22,12 +22,19 @@ def getfile():
             print "Sorry couldnt find/open file"
 
     rev_file = filename[::-1]
+    count = 0
     for i in rev_file :
         if i == '\\' :
             break_index = rev_file.index(i)
+            count = 1
             break
-    videoname = rev_file[:break_index][::-1]
-    path = rev_file[break_index:][::-1]
+    
+    if count == 0 :
+        path = ''
+        videoname = filename
+    else :
+        path = rev_file[break_index:][::-1]        
+        videoname = rev_file[:break_index][::-1]
     return (path, videoname)
 
     
