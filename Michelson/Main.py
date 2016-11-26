@@ -15,7 +15,6 @@ interactive=True
 (path,videoname)=getfile()
 
 
-
 #run process video and get returned intensity data
 intensitydata=processVideo(path,videoname)
 

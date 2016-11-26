@@ -14,6 +14,8 @@ def getfile():
         filename=raw_input("Please enter file name (whole address if possible)\nNote: You can drag and drop the file in too.\n")
         if filename.startswith('"') and filename.endswith('"'):
             filename = filename[1:-1]
+        if filename.startswith("'") and filename.endswith("'"):
+            filename = filename[1:-1]
         try:
             txt=open(filename,'r+')
             z = True
@@ -121,7 +123,9 @@ def askFocusArea(image):
     from croppergui import Cropper
     
     print "You are going to cropper window..."
-    instructions="   "
+    instructions="A cropcanvas window must have opened in the background."
+    instructions+="\nSelect an area like you would in paint(Press(left button)...Pull...leave)\nWhen done\n"
+    instructions+"'c' to confirm.  'r' to reset "
     print instructions
     
     roigenerator=Cropper(image)

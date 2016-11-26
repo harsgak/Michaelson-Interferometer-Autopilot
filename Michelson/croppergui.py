@@ -18,6 +18,7 @@ class Cropper(object):
         self.cropping = False
         self.cropcanvas=image.copy()
         self.backupimg=image.copy()
+        self.dragging_rect_endpoint = [(0, 0)]
     
     
     def mouse_slave(self,event, x, y, flags, param):
@@ -45,7 +46,8 @@ class Cropper(object):
                  # draw a rectangle around the region of interest
                  cv2.rectangle(self.cropcanvas, self.refPt[0], self.refPt[1], (0, 255, 0), 2)
                  cv2.imshow("cropcanvas", self.cropcanvas)
-                 
+         elif event == cv2.EVENT_MOUSEMOVE and self.cropping:
+             self.dragging_rect_endpoint = [(x, y)]        
   
   
     def runcrop(self):
@@ -62,7 +64,16 @@ class Cropper(object):
         # keep looping until the 'c' key is pressed
         while True:
             # display the image and wait for a keypress
-            cv2.imshow("cropcanvas", self.cropcanvas)
+            
+            if not self.cropping:
+                cv2.imshow("cropcanvas", self.cropcanvas)
+            elif self.cropping and self.dragging_rect_endpoint:
+                self.rect_cpy = self.backupimg.copy()
+                cv2.rectangle(self.rect_cpy, self.refPt[0], self.dragging_rect_endpoint[0], (0, 255, 0), 1)
+                cv2.imshow('cropcanvas', self.rect_cpy)
+            
+            
+            
             key = cv2.waitKey(1) & 0xFF
  
             # if the 'r' key is pressed, reset the cropping region
