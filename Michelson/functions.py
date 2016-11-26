@@ -1,6 +1,6 @@
 import cv2
 import pdb
-
+import time
 
 
 def getfile():
@@ -53,11 +53,11 @@ def processVideo(path,videoname="",interactive=True,startframe=0,endframe=1500):
     
     #pdb.run("print cap.read()[1].shape")
     
-    
-
-
-    ret,img= cap.read()
     frameno=0
+    ret,img= cap.read()
+    
+    if ret == False:
+        raise IOError('Could not read video. Try installing opencv_ffmpeg.dll')
     
     
     #Getting the coord of area to focus on
@@ -123,10 +123,11 @@ def askFocusArea(image):
     from croppergui import Cropper
     
     print "You are going to cropper window..."
-    instructions="A cropcanvas window must have opened in the background."
-    instructions+="\nSelect an area like you would in paint(Press(left button)...Pull...leave)\nWhen done\n"
-    instructions+"'c' to confirm.  'r' to reset "
+    instructions="A cropcanvas window should open in the background."
+    instructions+="\nSelect an area like you would in paint(MouseDown...Drag....MouseRelease)\nWhen done\n"
+    instructions+="'c' to confirm.  'r' to reset "
     print instructions
+    time.sleep(5)
     
     roigenerator=Cropper(image)
     roigenerator.runcrop()
