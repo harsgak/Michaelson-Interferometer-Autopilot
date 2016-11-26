@@ -6,8 +6,11 @@ import counter
 
 
 interactive=True
-videoname='VID_20150408_184717.mp4'
-path='C:\\Users\\Harsh\\Videos\\'
+#videoname='VID_20150408_184717.mp4'
+#path='C:\\Users\\Harsh\\Videos\\'
+
+videoname='Sample1.mp4'
+path=''
 
 
 
@@ -15,6 +18,8 @@ path='C:\\Users\\Harsh\\Videos\\'
 
 cap=cv2.VideoCapture(path+videoname)
 
+ret,img= cap.read()
+print ret
 print cap.read()[1].shape
 
 
